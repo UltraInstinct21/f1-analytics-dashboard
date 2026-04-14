@@ -288,6 +288,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **FastF1 Library**: Official F1 telemetry data fetching
   - [GitHub](https://github.com/theOehrly/Fast-F1)
   - [Documentation](https://docs.fastf1.dev/)
+- **f1-race-replay**: Race replay engine and telemetry processing pipeline used by the Race Replay tab
+  - [GitHub](https://github.com/IAmTomShaw/f1-race-replay)
 - **Formula 1**: Official race data and telemetry
 - **Streamlit**: Interactive web framework
 - **Plotly**: Interactive visualization library
