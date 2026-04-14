@@ -11,26 +11,34 @@ A comprehensive, interactive Formula 1 telemetry and performance analysis dashbo
 
 ## ✨ Features
 
-### 1. 🏠 Home: Season Overview
+### 1. 🏠 Home (App Landing)
+The main control-room landing page for the selected season:
+- **Season Control Room Hero**: At-a-glance status for completed rounds, next race, and latest winner
+- **Live Season Metrics**: Selected season, total races, upcoming races, and active drivers
+- **Event Timeline Cards**: Latest completed event and next scheduled event with dates
+- **Analysis Module Navigator**: Visual guide to all analysis modules (Season Overview, Race Weekend, Session Analysis, Telemetry Lab, Driver Comparison)
+- **How-To Panel**: Quick workflow steps for selecting season, opening modules, and loading FastF1 data
+
+### 2. 🏠 Season Overview
 Get a high-level summary of the Formula 1 Championship season:
 - **Driver Standings**: Current championship points for the top drivers
 - **Points Progression**: Interactive line chart showing points evolution across the season
 - **Race Calendar**: Visual display of completed and upcoming races with event details and dates
 
-### 2. 🏁 Race Weekend Overview
+### 3. 🏁 Race Weekend Overview
 Explore race weekend context and track characteristics:
 - **Weekend Sessions**: Complete schedule and times for all sessions (FP1, FP2, FP3, Qualifying, Sprint, Race)
 - **Dynamic Track Map**: Interactive telemetry-driven track layout with speed visualization (white → yellow → red gradient)
 - **Event Selection**: Choose any event from the F1 calendar
 
-### 3. 📊 Session Analysis
+### 4. 📊 Session Analysis
 Deep dive into lap times and driver performance for specific sessions:
 - **Fastest Laps Table**: Absolute fastest lap times for each driver in the session
 - **Lap Time Distribution**: Interactive box plots showing consistency and variation by driver
 - **Constructor Coloring**: Visual categorization by team colors
 - **Multi-Session Support**: Analyze FP1, FP2, FP3, Qualifying, Sprint, or Race sessions
 
-### 4. 🔬 Telemetry Lab: Pro Analysis
+### 5. 🔬 Telemetry Lab: Pro Analysis
 Professional-grade telemetry analysis with raw data visualization:
 - **Multi-Driver Telemetry**: Compare up to multiple drivers simultaneously
 - **Four Synchronized Traces**:
@@ -41,14 +49,14 @@ Professional-grade telemetry analysis with raw data visualization:
 - **Distance-based Visualization**: All data plotted against track distance (meters)
 - **Interactive Charts**: Zoom, pan, and hover for detailed inspection
 
-### 5. 🆚 Driver Comparison
+### 6. 🆚 Driver Comparison
 Head-to-head driver performance analysis:
 - **Fastest Lap Metrics**: Raw lap times for both drivers
 - **Time Delta**: Precise time difference between drivers (±seconds)
 - **Delta Over Distance**: Filled area chart showing where drivers gain or lose time throughout the lap
 - **Detailed Insights**: Identify specific track sections for performance differences
 
-### 6. 🎬 Race Replay
+### 7. 🎬 Race Replay
 Animated race visualization with live telemetry data:
 - **Lap-by-Lap Replay**: Watch the race unfold with real-time position data
 - **Interactive Playback**: Control speed and pause for detailed analysis
@@ -120,12 +128,12 @@ seaborn>=0.12.0
 
 ```
 ds-f1-analysis-dashboard/
-├── app.py                          # Main Streamlit application entry point
+├── app.py                          # Home (landing/control-room) page entry point
 ├── requirements.txt                # Python dependencies
 ├── README.md                       # This file
 ├── guide.md                        # Detailed user guide
 ├── pages/
-│   ├── 1_Home_Season_Overview.py  # Season summary and standings
+│   ├── 1_Season_Overview.py       # Season summary and standings
 │   ├── 2_Race_Weekend_Overview.py # Race weekend details
 │   ├── 3_Session_Analysis.py      # Lap times and distribution
 │   ├── 4_Telemetry_Lab.py         # Pro telemetry analysis
