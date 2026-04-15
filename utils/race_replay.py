@@ -11,6 +11,8 @@ import sys
 import os
 from pathlib import Path
 import pickle
+import importlib.util
+from functools import lru_cache
 
 import fastf1
 import numpy as np
@@ -64,6 +66,40 @@ def _import_replay_functions():
         raise ImportError(
             f"Failed to import race replay core functions from f1-race-replay: {e}"
         ) from e
+
+
+def _get_prediction_module_path():
+    """Get the path to the Formula-1-prediction module."""
+    repo_root = Path(__file__).resolve().parents[1]
+    prediction_root = repo_root / "Formula-1-prediction"
+
+    if not prediction_root.exists():
+        raise FileNotFoundError(
+            f"\n❌ Formula-1-prediction Module Not Found\n"
+            f"The 'Formula-1-prediction' folder is required for race simulation.\n"
+            f"\nExpected location: {prediction_root}\n"
+            f"Actual location: NOT FOUND"
+        )
+
+    return prediction_root
+
+
+@lru_cache(maxsize=1)
+def _load_prediction_race_engine():
+    """Load Formula-1-prediction race_engine.py as a module."""
+    engine_path = _get_prediction_module_path() / "race_engine.py"
+    if not engine_path.exists():
+        raise FileNotFoundError(
+            f"Race simulation engine not found at: {engine_path}"
+        )
+
+    spec = importlib.util.spec_from_file_location("formula_prediction_race_engine", str(engine_path))
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Could not create import spec for {engine_path}")
+
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 # ========================
@@ -195,6 +231,24 @@ def load_replay_payload(year, round_number, session_code):
         "driver_colors": replay_data.get("driver_colors", {}),
         "total_laps": replay_data.get("total_laps"),
     }
+
+
+def simulate_lap_by_lap_race(weather="DRY", circuit="STANDARD", seed=None):
+    """
+    Run the Formula-1-prediction lap-by-lap race simulation.
+
+    Args:
+        weather (str): DRY | LIGHT_RAIN | HEAVY_RAIN
+        circuit (str): Circuit profile name
+        seed (int | None): Optional random seed
+
+    Returns:
+        dict: Race simulation payload from race_engine.simulate_race
+    """
+    engine = _load_prediction_race_engine()
+    if not hasattr(engine, "simulate_race"):
+        raise AttributeError("race_engine.py does not expose simulate_race()")
+    return engine.simulate_race(weather=weather, circuit=circuit, seed=seed)
 
 
 # ========================
