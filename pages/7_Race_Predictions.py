@@ -121,6 +121,36 @@ def stable_tire_choice(year: int, rnd: int, code: str, grid_pos: float) -> str:
     return str(rng.choice(TIRE_CHOICES, p=probs))
 
 
+def fetch_race_grid_from_fastf1(year: int, round_number: int) -> tuple[pd.DataFrame, str]:
+    """Fetch the actual grid for a specific race using FastF1."""
+    try:
+        # Get the session for the race
+        session = fastf1.get_session(year, round_number, "Race")
+        session.load(telemetry=False, weather=False)
+        
+        if session.results is None or session.results.empty:
+            return pd.DataFrame(), f"Could not load grid for {year} Round {round_number}."
+        
+        results = session.results.copy()
+        grid = pd.DataFrame({
+            "Driver": results["Abbreviation"],
+            "Team": results["TeamName"],
+            "GridPosition": results["GridPosition"],
+        })
+        
+        # Filter valid data
+        grid = grid.dropna(subset=["Driver", "GridPosition"])
+        grid["GridPosition"] = pd.to_numeric(grid["GridPosition"], errors="coerce")
+        grid = grid.dropna(subset=["GridPosition"]).sort_values("GridPosition")
+        grid["GridPosition"] = grid["GridPosition"].astype(int)
+        grid["Driver"] = grid["Driver"].astype(str).str.upper().str.strip()
+        grid = grid.drop_duplicates(subset=["Driver"], keep="first").reset_index(drop=True)
+        
+        return grid, f"Loaded grid from {year} Round {round_number}."
+    except Exception as e:
+        return pd.DataFrame(), f"Error fetching race grid: {str(e)}"
+
+
 def build_default_grid(history: pd.DataFrame, season: int) -> tuple[pd.DataFrame, str]:
     fallback_df = pd.DataFrame(FALLBACK_GRID, columns=["Driver", "Team", "GridPosition"])
     season_df = history[history["Year"] == int(season)] if "Year" in history.columns else pd.DataFrame()
@@ -661,7 +691,16 @@ with tabs[0]:
 
 with tabs[1]:
     st.subheader("🏎️ Full Grid Race-Order Prediction")
-    grid_df, grid_note = build_default_grid(hist_df, int(predict_year))
+    
+    # Try to load the actual race grid first
+    if predict_round and selected_event_name:
+        grid_df, grid_note = fetch_race_grid_from_fastf1(int(predict_year), int(predict_round))
+        if grid_df.empty:
+            # Fall back to historical grid if FastF1 fetch fails
+            grid_df, grid_note = build_default_grid(hist_df, int(predict_year))
+    else:
+        grid_df, grid_note = build_default_grid(hist_df, int(predict_year))
+    
     st.caption(grid_note)
     edited_grid = st.data_editor(
         grid_df,
@@ -987,7 +1026,16 @@ with tabs[5]:
 
 with tabs[6]:
     st.subheader("🎮 Race & Championship Simulation")
-    sim_drivers = build_default_grid(hist_df, int(predict_year))[0]["Driver"].head(20).tolist()
+    
+    # Load drivers from the selected race grid
+    if predict_round and selected_event_name:
+        race_grid_df, _ = fetch_race_grid_from_fastf1(int(predict_year), int(predict_round))
+        if race_grid_df.empty:
+            race_grid_df, _ = build_default_grid(hist_df, int(predict_year))
+    else:
+        race_grid_df, _ = build_default_grid(hist_df, int(predict_year))
+    
+    sim_drivers = race_grid_df["Driver"].head(20).tolist()
     s1, s2, s3 = st.columns([1, 1, 2])
     with s1:
         sim_weather = st.selectbox("Race Weather", ["DRY", "LIGHT_RAIN", "HEAVY_RAIN"], index=0)
