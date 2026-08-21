@@ -153,4 +153,14 @@ config.local.py
 secrets.py
 
 # Optional external modules
-f1-race-replay/  # External f1-race-replay module (clone separately if needed)
+f1-race-replay/
+
+# Node & Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# FastF1 Cache
+.fastf1-cache/
+fastf1_http_cache.sqlite
+

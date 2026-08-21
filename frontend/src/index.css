@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+
+:root {
+  /* Design Tokens from DESIGN.md */
+  --color-parchment: #fefffc;
+  --color-paper: #ffffff;
+  --color-linen: #f9faf7;
+  --color-ink-black: #171717;
+  --color-graphite: #2c2c2c;
+  --color-charcoal: #444141;
+  --color-ash: #646464;
+  --color-fog: #b4b8b4;
+  --color-mist: #dee2de;
+  --color-twilight: #282834;
+  --color-dusk: #1f1f29;
+  --color-signal-blue: #41a1cf;
+  --color-cerulean: #0081c0;
+
+  /* Font Families */
+  --font-serif: 'Fraunces', 'PP Mondwest', Georgia, serif;
+  --font-sans: 'Inter Variable', 'af', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Base Canvas */
+  --background: #fefffc;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #2c2c2c;
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  --primary: #1f1f29;
+  --primary-foreground: #ffffff;
+  --secondary: #f9faf7;
+  --secondary-foreground: #282834;
+  --muted: #f9faf7;
+  --muted-foreground: #646464;
+  --accent: #f9faf7;
+  --accent-foreground: #282834;
+  --border: #dee2de;
+  --input: #f9faf7;
+  --ring: #41a1cf;
+  --radius: 0.5rem;
+}
+
+body {
+  background-color: var(--color-parchment);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.font-editorial {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-parchment);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-fog);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ash);
+}
+
+/* Glassmorphism Navigation Pill */
+.nav-pill {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-twilight);
+  border-radius: 50px;
+}
+
+/* Primary Outlined CTA */
+.btn-signal {
+  border: 1px solid var(--color-signal-blue);
+  color: var(--color-signal-blue);
+  background: transparent;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+.btn-signal:hover {
+  background: rgba(65, 161, 207, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Content Card with Hairline Mist Border */
+.card-mist {
+  background: var(--color-paper);
+  border: 1px solid var(--color-mist);
+  border-radius: 12px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Input Form Linen Surface */
+.input-linen {
+  background: var(--color-linen);
+  border: none;
+  border-bottom: 1.5px solid var(--color-charcoal);
+  border-radius: 0px;
+  color: var(--color-charcoal);
+}

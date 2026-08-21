@@ -1,11 +1,11 @@
-streamlit>=1.30.0
+# Core Backend Dependencies
 fastf1>=3.0.0
 pandas>=2.0.0
-plotly>=5.0.0
-matplotlib>=3.7.0
-seaborn>=0.12.0
 numpy>=1.24.0
+scipy>=1.10.0
+fastapi>=0.110.0
+uvicorn>=0.28.0
 
-# ML dependencies for Race Predictions module
+# ML Dependencies
 scikit-learn>=1.3.0
-xgboost>=2.0.0          # optional but recommended; falls back to RandomForest if missing
+xgboost>=2.0.0
